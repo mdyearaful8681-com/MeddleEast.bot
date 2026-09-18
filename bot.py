@@ -21,22 +21,14 @@ def keep_alive():
 # টেলিগ্রাম API কনফিগারেশন
 api_id = 32140940
 api_hash = '02d8866c09ba53e70b7cdb9dbcca9342'
-
-# এখানে আপনার টেলিগ্রাম সেশন স্ট্রিং (Session String) বসাতে হবে 
-# (যদি লোকাল সেশন ফাইল ব্যবহার না করে String Session দিতে চান, তবে নিচে স্ট్రిং বসিয়ে দিন)
-SESSION_STRING = os.environ.get('SESSION_STRING', '') 
+bot_token = '8794384785:AAHe6M0dZ601uGiW9zXalEI1ssDogTHKaVw'
 
 source_channels = ['Intelslava', 'DDGeopolitics', 'geopolitics_prime']
 my_channel = '@MiddleEastEnglis'
 channel_credit = "\n\nFollow me: @MiddleEastEnglis"
 
-# টেলিগ্রাম ক্লায়েন্ট ইনিশিয়ালাইজেশন (স্ট্রিং সেশন বা মেমোরি বেসড সেশন ব্যবহার করার জন্য)
-if SESSION_STRING:
-    from telethon.sessions import StringSession
-    client = TelegramClient(StringSession(SESSION_STRING), api_id, api_hash, system_version='4.16.3-vx')
-else:
-    # যদি এনভায়রনমেন্ট ভ্যারিয়েবলে স্ট্রিং না থাকে, তবে মেমোরি সেশন ব্যবহার করবে যাতে রেন্ডারে ফাইল ক্র্যাশ না করে
-    client = TelegramClient('anon', api_id, api_hash, system_version='4.16.3-vx')
+# সরাসরি বট টোকেন দিয়ে টেলিগ্রাম ক্লায়েন্ট ইনিশিয়ালাইজেশন
+client = TelegramClient('bot_session', api_id, api_hash, system_version='4.16.3-vx')
 
 @client.on(events.NewMessage(chats=source_channels))
 async def handler(event):
@@ -60,5 +52,5 @@ async def handler(event):
 if __name__ == "__main__":
     keep_alive()
     print("বট ক্লাউডে চালু হচ্ছে...")
-    client.start()
+    client.start(bot_token=bot_token)
     client.run_until_disconnected()
