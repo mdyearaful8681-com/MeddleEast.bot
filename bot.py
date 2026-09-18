@@ -1,6 +1,7 @@
 import os
 import re
 from telethon import TelegramClient, events
+from telethon.sessions import StringSession
 from flask import Flask
 from threading import Thread
 
@@ -21,14 +22,16 @@ def keep_alive():
 # টেলিগ্রাম API কনফিগারেশন
 api_id = 32140940
 api_hash = '02d8866c09ba53e70b7cdb9dbcca9342'
-bot_token = '8794384785:AAHe6M0dZ601uGiW9zXalEI1ssDogTHKaVw'
+
+# রেন্ডারে সেভ করা String Session কোডটি এখানে বসিয়ে দিন
+string_session = os.environ.get('SESSION_STRING', 'আপনার_স্ট্রিং_সেশন_কোডটি_এখানেও_পেস্ট_করতে_পারেন_বা_রেন্ডার_এনভায়রনমেন্ট_থেকে_নিবে')
 
 source_channels = ['Intelslava', 'DDGeopolitics', 'geopolitics_prime']
 my_channel = '@MiddleEastEnglis'
 channel_credit = "\n\nFollow me: @MiddleEastEnglis"
 
-# সরাসরি বট টোকেন দিয়ে টেলিগ্রাম ক্লায়েন্ট ইনিশিয়ালাইজেশন
-client = TelegramClient('bot_session', api_id, api_hash, system_version='4.16.3-vx')
+# StringSession ব্যবহার করে ক্লায়েন্ট ইনিশিয়ালাইজেশন
+client = TelegramClient(StringSession(string_session), api_id, api_hash, system_version='4.16.3-vx')
 
 @client.on(events.NewMessage(chats=source_channels))
 async def handler(event):
@@ -52,5 +55,5 @@ async def handler(event):
 if __name__ == "__main__":
     keep_alive()
     print("বট ক্লাউডে চালু হচ্ছে...")
-    client.start(bot_token=bot_token)
+    client.start()
     client.run_until_disconnected()
